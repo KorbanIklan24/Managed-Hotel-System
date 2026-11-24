@@ -10,16 +10,16 @@ package Hotel;
  */
 
 import java.time.LocalDate;
-import Variants.Room;
-import Variants.Reservation;
-import Variants.Reservation_Status;
+import Module.Room;
+import Module.Reservation;
+import Module.Reservation_Status;
 
 public class Client extends User {
     protected String phone;
     
     
-    public Client (String user_id, String nama, String password, String phone) {
-        super(user_id, nama, password);
+    public Client (String user_id, String name, String password, String phone) {
+        super(user_id, name, password);
         this.phone = phone;
     }
     

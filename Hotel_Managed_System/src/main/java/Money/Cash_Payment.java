@@ -10,12 +10,12 @@ package Money;
  */
 public class Cash_Payment implements Payment {
     @Override
-    public boolean pay (int amount) {
+    public boolean pay(int amount) {
         if (amount <= 0) { // Uangnya nggak ada atau malah minus.
             System.out.println("Bayar, Anjing!");
             return false;
-    }
-    // Uangnya ada.
+        }
+        // Uangnya ada.
         System.out.println("Pembayaran Tunai Sebesar Rp" + amount + ",00 Telah Berhasil.");
         return true;
     }

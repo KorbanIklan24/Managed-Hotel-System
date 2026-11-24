@@ -2,14 +2,14 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Enum.java to edit this template
  */
-package Variants;
+package Module;
 
 /**
  *
  * @author caitlyn
  */
-public enum Room_Status {
-    AVAILABLE,
-    ORDERED,
-    OCCUPIED
+public enum Room_Type {
+    STANDARD,
+    DELUXE,
+    SUITE
 }
