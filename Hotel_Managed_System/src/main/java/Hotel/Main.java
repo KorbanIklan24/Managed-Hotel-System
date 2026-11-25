@@ -42,14 +42,15 @@ public class Main {
         // Landing Page / Main Menu.
         while (true) {
             System.out.println("\n===> [SISTEM MANAJEMEN HOTEL] <===");
-            System.out.println("1. Login :)");
+            System.out.println("1. Sign-In :)");
+            System.out.println("2. Sign-Up :)");
             System.out.println("0. KELUAR!!!");
             int choice = read_int(input, "Mau Mana, Kau? Pilih! ");
 
             if (choice == 0) {
                 System.out.println("Program Ditutup. Dah, Sana Pergi!");
                 break;
-                 
+            
             } else if (choice == 1) {
                 User active_user = login_process(input);
                 if (active_user != null) {
@@ -61,6 +62,9 @@ public class Main {
                         menu_admin(input, (Admin) active_user);
                     }
                 }
+            
+            } else if (choice == 2) {
+                register_client(input);
             }
         }
         input.close();
@@ -69,8 +73,12 @@ public class Main {
     // Data awal untuk memudahkan demo.
     private static void init_dummy_data() {
         users.add(new Client("T01", "Patrick Star", "123", "08123456789"));
-        users.add(new Receptionist("R01", "Squidward Tenpoles", "123"));
-        users.add(new Admin("A01", "Eugene Krabs", "123"));
+        
+        users.add(new Receptionist("R01", "Meila", "123"));
+        users.add(new Receptionist("R02", "Squidward Tenpoles", "123"));
+        
+        users.add(new Admin("A01", "Dimas", "123"));
+        users.add(new Admin("A02", "Eugene Krabs", "123"));
 
         rooms.add(new Room("101", Room_Type.STANDARD, 300000));
         rooms.add(new Room("102", Room_Type.DELUXE, 450000));
@@ -92,6 +100,29 @@ public class Main {
         System.out.println("Login gagal: ID atau password salah. Ingat, nggak? Kalau nggak ya udah.");
         return null;
     }
+    
+    private static void register_client(Scanner input) {
+        System.out.println("\n--- DAFTAR AKUN TAMU ---");
+        System.out.print("Buat User ID : ");
+        String id = input.nextLine().trim();
+
+        for (User u : users) {
+            if (u.get_user_id().equals(id)) {
+                System.out.println("ID sudah dipakai. Pakai ID lain!");
+                return;
+        }
+    }
+
+    System.out.print("Nama         : ");
+    String name = input.nextLine().trim();
+    System.out.print("Password     : ");
+    String pass = input.nextLine().trim();
+    System.out.print("No. Telepon  : ");
+    String phone = input.nextLine().trim();
+
+    users.add(new Client(id, name, pass, phone));
+    System.out.println("Akun berhasil dibuat! Silakan login pakai ID: " + id);
+}
 
     // ==================================== MENU TAMU ========================================
     private static void menu_client(Scanner input, Client client) {
