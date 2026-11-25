@@ -1,0 +1,67 @@
+@startuml
+skinparam dpi 150
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam package {
+  BorderColor #888888
+  FontStyle bold
+}
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #333333
+}
+hide empty members
+
+package "Hotel" {
+  class Main {
+    - {static} users : List<User>
+    - {static} rooms : List<Room>
+    - {static} reservations : List<Reservation>
+    - {static} bills : List<Bill>
+    + {static} main(args : String[]) : void
+    - {static} init_dummy_data() : void
+    - {static} login_process(input : Scanner) : User
+    - {static} menu_client(input : Scanner, client : Client) : void
+    - {static} menu_receptionist(input : Scanner, r : Receptionist) : void
+    - {static} menu_admin(input : Scanner, admin : Admin) : void
+    - {static} show_available_room(in : LocalDate, out : LocalDate) : void
+    - {static} interactive_reservate(input : Scanner, client : Client,\n   receptionist : Receptionist) : void
+    - {static} bill_payment_process(input : Scanner, receptionist : Receptionist) : void
+    - {static} find_client(id : String) : Client
+    - {static} select_room(input : Scanner) : Room
+    - {static} select_reservation(input : Scanner) : Reservation
+    - {static} read_int(input : Scanner, prompt : String) : int
+    - {static} read_date(input : Scanner, prompt : String) : LocalDate
+  }
+  abstract class User
+  class Client
+  class Receptionist
+  class Admin
+}
+
+package "Module" {
+  class Room
+  class Reservation
+  class Bill
+}
+
+package "Money" {
+  interface Payment
+  class Cash_Payment
+  class Transfer_Payment
+}
+
+Main o--> "0..*" User : users
+Main o--> "0..*" Room : rooms
+Main o--> "0..*" Reservation : reservations
+Main o--> "0..*" Bill : bills
+
+Main ..> Client : <<menu>>
+Main ..> Receptionist : <<menu>>
+Main ..> Admin : <<menu>>
+Main ..> Payment
+Main ..> Cash_Payment : <<create>>
+Main ..> Transfer_Payment : <<create>>
+@enduml

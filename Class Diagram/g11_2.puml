@@ -1,0 +1,128 @@
+@startuml
+skinparam dpi 150
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam package {
+  BorderColor #888888
+  FontStyle bold
+}
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #333333
+}
+hide empty members
+
+package "Hotel" {
+  class Client {
+    # phone : String
+  }
+}
+
+package "Module" {
+  class Reservation {
+    - id : String
+    - client : Client
+    - enter : LocalDate
+    - out : LocalDate
+    - status : Reservation_Status
+    - items : List<Reservation_Item>
+    + Reservation(id, client, enter, out, status)
+    + get_id() : String
+    + get_client() : Client
+    + get_enter() : LocalDate
+    + get_out() : LocalDate
+    + get_status() : Reservation_Status
+    + get_items() : List<Reservation_Item>
+    + add_item(room : Room) : void
+    + nights() : int
+    + total_rent() : int
+    + change_status(status : Reservation_Status) : void
+  }
+
+  class Reservation_Item {
+    - room : Room
+    - reservation : Reservation
+    - price_at_booking : int
+    + Reservation_Item(room : Room, reservation : Reservation)
+    + get_room() : Room
+    + get_reservation() : Reservation
+    + get_price_at_booking() : int
+    + subtotal(nights : int) : int
+  }
+
+  class Room {
+    - number : String
+    - type : Room_Type
+    - price_per_night : int
+    - status : Room_Status
+    - items : List<Reservation_Item>
+    + Room(number : String, type : Room_Type, price_per_night : int)
+    + get_number() : String
+    + get_type() : Room_Type
+    + get_price_per_night() : int
+    + get_status() : Room_Status
+    + add_reservation_item(item : Reservation_Item) : void
+    + is_available(enter : LocalDate, out : LocalDate) : boolean
+    + change_status(status : Room_Status) : void
+    + change_price(new_price : int) : void
+  }
+
+  class Bill {
+    - reservation : Reservation
+    - extra_fee : int
+    - paid : boolean
+    + Bill(reservation : Reservation, extra_fee : int)
+    + get_reservation() : Reservation
+    + get_extra_fee() : int
+    + is_paid() : boolean
+    + total() : int
+    + pay(p : Payment) : boolean
+  }
+
+  enum Reservation_Status {
+    ORDERED
+    CHECKED_IN
+    CHECKED_OUT
+    CANCELLED
+  }
+  enum Room_Status {
+    AVAILABLE
+    ORDERED
+    OCCUPIED
+  }
+  enum Room_Type {
+    STANDARD
+    DELUXE
+    SUITE
+  }
+}
+
+package "Money" {
+  interface Payment {
+    + pay(amount : int) : boolean
+  }
+  class Cash_Payment {
+    + pay(amount : int) : boolean
+  }
+  class Transfer_Payment {
+    - reference_number : String
+    + Transfer_Payment(reference_number : String)
+    + pay(amount : int) : boolean
+  }
+}
+
+Client "1" <-- "0..*" Reservation : client
+Reservation "1" *-- "1..*" Reservation_Item : items
+Reservation_Item "0..*" <--> "1" Room : room / items
+Bill "0..1" --> "1" Reservation : reservation
+Bill ..> Payment : pay(p)
+
+Payment <|.. Cash_Payment
+Payment <|.. Transfer_Payment
+
+Reservation --> Reservation_Status
+Room --> Room_Status
+Room --> Room_Type
+@enduml

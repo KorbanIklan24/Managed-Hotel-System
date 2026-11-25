@@ -1,0 +1,77 @@
+@startuml
+skinparam dpi 150
+skinparam shadowing false
+skinparam roundcorner 8
+skinparam classAttributeIconSize 0
+skinparam packageStyle rectangle
+skinparam package {
+  BorderColor #888888
+  FontStyle bold
+}
+skinparam class {
+  BackgroundColor #FFFFFF
+  BorderColor #333333
+}
+hide empty members
+
+abstract class User {
+  # user_id : String
+  # name : String
+  - password : String
+  + User(user_id, name, password : String)
+  + get_user_id() : String
+  + get_name() : String
+  + login(user_id : String, password : String) : boolean
+  + {abstract} role() : String
+}
+
+class Client {
+  # phone : String
+  + Client(user_id, name, password, phone : String)
+  + role() : String
+  + reservating(enter : LocalDate, out : LocalDate,\n    room : Room) : Reservation
+}
+
+class Receptionist {
+  + Receptionist(user_id, name, password : String)
+  + role() : String
+  + reservating(client : Client, enter : LocalDate,\n    out : LocalDate, room : Room) : Reservation
+  + check_in(r : Reservation) : void
+  + check_out(r : Reservation, extra_fee : int) : Bill
+  + receive_payment(b : Bill, p : Payment) : boolean
+}
+
+class Admin {
+  + Admin(user_id, name, password : String)
+  + role() : String
+  + add_room(rooms : List<Room>, r : Room) : void
+  + change_price(r : Room, new_price : int) : void
+  + create_receptionist(users : List<User>,\n    id, nama, password : String) : void
+  + calculate_report(date : LocalDate, rooms : List<Room>,\n    reservations : List<Reservation>,\n    bills : List<Bill>) : String
+}
+
+package "Module" {
+  class Room
+  class Reservation
+  class Bill
+}
+package "Money" {
+  interface Payment
+}
+
+User <|-- Client
+User <|-- Receptionist
+User <|-- Admin
+
+Client ..> Room
+Client ..> Reservation
+Receptionist ..> Client
+Receptionist ..> Reservation
+Receptionist ..> Room
+Receptionist ..> Bill
+Receptionist ..> Payment
+Admin ..> Room
+Admin ..> Reservation
+Admin ..> Bill
+Admin ..> Receptionist : <<create>>
+@enduml
